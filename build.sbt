@@ -2,9 +2,9 @@ import scala.sys.process._
 
 name := "dataplatform_utils"
 organization := "com.goibibo"
-version := "2.4.5.2"
-scalaVersion := "2.11.12"
-addCompilerPlugin(scalafixSemanticdb) // enable SemanticDB
+version := "2.4.5"
+scalaVersion := "2.12.10"
+//addCompilerPlugin(scalafixSemanticdb) // enable SemanticDB
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 scalacOptions ++= List(
   "-target:jvm-1.8",
@@ -26,24 +26,24 @@ libraryDependencies ++= Seq(
    https://docs.databricks.com/release-notes/runtime/5.3.html#installed-java-and-scala-libraries-scala-2-11-cluster-version
    */
   "org.joda" % "joda-convert" % "1.7" % "provided",
-  "org.apache.spark" %% "spark-core" % "2.4.5" % "provided",
-  "org.apache.spark" %% "spark-sql" % "2.4.5" % "provided",
-  "org.apache.spark" %% "spark-streaming" % "2.4.5" % "provided",
-  "org.apache.spark" %% "spark-catalyst" % "2.4.5" % "provided",
-  "org.apache.spark" %% "spark-hive" % "2.4.5" % "provided",
+  "org.apache.spark" %% "spark-core" % "3.0.0-preview2" % "provided",
+  "org.apache.spark" %% "spark-sql" % "3.0.0-preview2" % "provided",
+  "org.apache.spark" %% "spark-streaming" % "3.0.0-preview2" % "provided",
+  "org.apache.spark" %% "spark-catalyst" % "3.0.0-preview2" % "provided",
+  "org.apache.spark" %% "spark-hive" % "3.0.0-preview2" % "provided",
   "joda-time" % "joda-time" % "2.9.3" % "provided",
   "org.slf4j" % "slf4j-api" % "1.7.16" % "provided",
-  "com.databricks" %% "spark-redshift" % "3.0.0-preview1" % "provided",
+  //"com.databricks" % "spark-redshift" % "3.0.0-preview1" % "provided",
   "org.apache.zookeeper" % "zookeeper" % "3.4.6" % "provided",
   "org.apache.kafka" % "kafka-clients" % "2.0.0" % "provided",
-  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.4.5" % "provided",
+  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "3.0.0-preview2" % "provided",
   "org.spark-project.hive" % "hive-metastore" % "1.2.1.spark2" % "provided",
   /*
    Provided because, It will always be available on databricks,
    To run on EMR, add it in her app's sbt file
    */
-  "com.databricks" %% "dbutils-api" % "0.0.3" % "provided",
-  "io.delta" %% "delta-core" % "0.1.0" % "provided",
+  //"com.databricks" %% "dbutils-api" % "0.0.3" % "provided",
+  "io.delta" %% "delta-core" % "0.5.0" % "provided",
   /*
    This is required only for test-cases, so kept in "test".
    */
@@ -84,7 +84,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.7" % "test",
   /* Pureconfig is only used in test. */
   "com.github.pureconfig" %% "pureconfig" % "0.10.2" % "test",
-  "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.12.0" % "test"
+  //"com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.12.0" % "test"
 )
 
 parallelExecution in Test := false
@@ -115,3 +115,6 @@ assemblyMergeStrategy in assembly := {
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
 }
+
+test in assembly := {}
+
