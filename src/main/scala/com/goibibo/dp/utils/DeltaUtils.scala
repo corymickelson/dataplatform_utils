@@ -246,10 +246,9 @@ object DeltaUtils {
 
       val alterSchema =
         if (mergeSchema && !oldSchema.isEmpty) {
-          Try {
-            org.apache.spark.sql.delta.schema.SchemaUtils
-              .mergeSchemas(tableSchema = oldSchema.get, dataSchema = schema)
-          }.isFailure
+          // This is the only correct behaviour because
+          // of Databricks and Spark version mismatches.
+          true
         } else false
 
       if (alterSchema) {
