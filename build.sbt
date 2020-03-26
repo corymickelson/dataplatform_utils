@@ -2,7 +2,7 @@ import scala.sys.process._
 
 name := "dataplatform_utils"
 organization := "com.goibibo"
-version := "2.4.4.1"
+version := "2.4.5.1"
 scalaVersion := "2.11.12"
 addCompilerPlugin(scalafixSemanticdb) // enable SemanticDB
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
@@ -26,17 +26,17 @@ libraryDependencies ++= Seq(
    https://docs.databricks.com/release-notes/runtime/5.3.html#installed-java-and-scala-libraries-scala-2-11-cluster-version
    */
   "org.joda" % "joda-convert" % "1.7" % "provided",
-  "org.apache.spark" %% "spark-core" % "2.4.4" % "provided",
-  "org.apache.spark" %% "spark-sql" % "2.4.4" % "provided",
-  "org.apache.spark" %% "spark-streaming" % "2.4.4" % "provided",
-  "org.apache.spark" %% "spark-catalyst" % "2.4.4" % "provided",
-  "org.apache.spark" %% "spark-hive" % "2.4.4" % "provided",
+  "org.apache.spark" %% "spark-core" % "2.4.5" % "provided",
+  "org.apache.spark" %% "spark-sql" % "2.4.5" % "provided",
+  "org.apache.spark" %% "spark-streaming" % "2.4.5" % "provided",
+  "org.apache.spark" %% "spark-catalyst" % "2.4.5" % "provided",
+  "org.apache.spark" %% "spark-hive" % "2.4.5" % "provided",
   "joda-time" % "joda-time" % "2.9.3" % "provided",
   "org.slf4j" % "slf4j-api" % "1.7.16" % "provided",
   "com.databricks" %% "spark-redshift" % "3.0.0-preview1" % "provided",
   "org.apache.zookeeper" % "zookeeper" % "3.4.6" % "provided",
   "org.apache.kafka" % "kafka-clients" % "2.0.0" % "provided",
-  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.4.4" % "provided",
+  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.4.5" % "provided",
   "org.spark-project.hive" % "hive-metastore" % "1.2.1.spark2" % "provided",
   /*
    Provided because, It will always be available on databricks,
