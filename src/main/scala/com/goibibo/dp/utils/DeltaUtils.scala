@@ -150,7 +150,8 @@ object DeltaUtils {
       spectrumTable: STable,
       mergeSchema: Boolean = true,
       partitionColumns: Option[Seq[String]] = None,
-      tableProperties: Map[String, String] = Map.empty[String, String]
+      tableProperties: Map[String, String] = Map.empty[String, String],
+      columnsToIgnore: Seq[String] = Seq()
   )(implicit glueClient: GlueClient): Try[Unit] =
     Try {
       import spark.implicits._
@@ -214,6 +215,11 @@ object DeltaUtils {
           .head
       )
 
+      // Filter some columns from the table in Spectrum
+      val spectrumSchema = StructType(schema.filter(sf =>
+                                        !(columnsToIgnore.contains(sf.name))
+                                      ))
+
       // Create table in glue if it doesn't exist.
       val serde =
         org.apache.spark.sql.internal.HiveSerDe.serdeMap.get("parquet").get
@@ -231,7 +237,7 @@ object DeltaUtils {
           compressed = false,
           properties = Map("path" -> placeholderPath)
         ),
-        schema = schema,
+        schema = spectrumSchema,
         provider = Some("hive"),
         partitionColumnNames = partitionColumnNames,
         tracksPartitionsInCatalog = true,
@@ -253,7 +259,7 @@ object DeltaUtils {
 
       if (alterSchema) {
         val hiveSchemaFields =
-          schema.filter(sf => !(partitionColumnNames.contains(sf.name)))
+          spectrumSchema.filter(sf => !(partitionColumnNames.contains(sf.name)))
         catalog.alterTableDataSchema(
           dbName,
           tableName,
