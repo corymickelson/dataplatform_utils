@@ -2,7 +2,7 @@ import scala.sys.process._
 
 name := "dataplatform_utils"
 organization := "com.goibibo"
-version := "2.4.5.1"
+version := "2.4.5.2"
 scalaVersion := "2.11.12"
 addCompilerPlugin(scalafixSemanticdb) // enable SemanticDB
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
