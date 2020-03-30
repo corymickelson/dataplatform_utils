@@ -10,7 +10,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.delta.DeltaLog
 import org.apache.spark.sql.delta.DeltaTableUtils._
 
-import scala.util.{Try, Failure}
+import scala.util.{Try, Success, Failure}
 import org.apache.hadoop.fs.Path
 import software.amazon.awssdk.services.glue.GlueClient
 
@@ -171,6 +171,19 @@ object DeltaUtils {
         }
       })
 
+      val hadoopPath = new Path(normalizedTablePathS3)
+
+      // No need for DeltaToGlue to run if path is empty
+      if (emptyDir(hadoopPath) && !pathExists(spark, hadoopPath)) {
+        logger.debug(s"Empty Table $normalizedTablePathS3. Nothing to do.")
+        return Success() 
+      }
+
+
+      if (!isDeltaTable(spark, hadoopPath)) {
+        throw new Exception(s"$normalizedTablePathS3 is not a Delta Table. Aborting")
+      }
+
       val (dbName, tableName) = spectrumTable match {
         case STable(t) => getTableDetails(t)
       }
@@ -216,9 +229,8 @@ object DeltaUtils {
       )
 
       // Filter some columns from the table in Spectrum
-      val spectrumSchema = StructType(schema.filter(sf =>
-                                        !(columnsToIgnore.contains(sf.name))
-                                      ))
+      val spectrumSchema =
+        StructType(schema.filter(sf => !(columnsToIgnore.contains(sf.name))))
 
       // Create table in glue if it doesn't exist.
       val serde =
@@ -274,7 +286,7 @@ object DeltaUtils {
         val tbDetails = GlueUtilsTypes.TableDetails(tableName, dbName)
         val manifestLocation = partResp.map { case (cp, l) => l }.head
         GlueUtils.alterTableLocation(tbDetails, manifestLocation, None).get
-      } else {
+      } else if (!catalogPartitions.isEmpty) {
         // Create or replace partitions.
         // All partitions have their locations updated to the new manifest file.
         catalog.createPartitions(
